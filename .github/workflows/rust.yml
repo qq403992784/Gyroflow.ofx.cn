@@ -1,0 +1,29 @@
+name: Build Gyroflow OFX (Chinese)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+      - name: Build release
+        working-directory: guroflow_ofx
+        run: cargo build --release
+      - name: Create bundle
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path "bundle/Gyroflow.ofx.bundle/Contents/Win64" -Force
+          Copy-Item "guroflow_ofx/target/release/gyroflow_ofx.dll" "bundle/Gyroflow.ofx.bundle/Contents/Win64/Gyroflow.ofx"
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Gyroflow-OFX-Chinese
+          path: bundle/
