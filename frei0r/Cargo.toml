@@ -1,0 +1,20 @@
+[package]
+name = "gyroflow-frei0r"
+version = "2.1.1"
+authors = ["Adrian <adrian.eddy@gmail.com>"]
+edition = "2021"
+description = "Gyroflow frei0r plugin"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+gyroflow-plugin-base = { path = "../common" }
+log = "0.4"
+cstr = "0.2"
+
+[profile.deploy]
+inherits = "release"
+codegen-units = 1
+lto = true
+strip = true
